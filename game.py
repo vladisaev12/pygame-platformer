@@ -1,17 +1,17 @@
 import pyGUtils
 from pyGUtils import pygame
-from logger import log_write, DEBUG_LEVEL
+from logger import Logger
 
 from Player import Player
 
 #create the Storage
-GameStorage: pyGUtils.PyStorage = pyGUtils.PyStorage("test game")
+GameStorage: pyGUtils.PyGStorage = pyGUtils.PyGStorage("test game")
 
 #add exit keybind
 GameStorage.AddKeyBind(pygame.QUIT, pyGUtils.Quit)
 
 #add the player to the GameStorage Object
-GameStorage.AddObject("Player",Player(GameStorage.screenMiddle(), 0, 3, pygame.Color(0, 255, 255), GameStorage.screen))
+GameStorage.AddObject("Player",Player(GameStorage.screenMiddleFloat(), 0, 1, pygame.Color(0, 255, 255), GameStorage.screen, 2.0, 5.0, GameStorage.screenMiddle()))
 
 #player movement
 GameStorage.AddKeyBind(pygame.K_a, GameStorage.objects["Player"].goLeft)
@@ -21,6 +21,6 @@ GameStorage.AddKeyBind(pygame.K_w, GameStorage.objects["Player"].goUp)
 
 GameStorage.AddUpdate(GameStorage.objects["Player"].Update)
 
-log_write("Loop Starting", DEBUG_LEVEL.INFO)
+GameStorage.logger.log_write("Loop Starting", Logger.DEBUG_LEVEL.DEBUG)
 while True:
     GameStorage.Update()

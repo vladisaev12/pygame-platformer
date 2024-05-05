@@ -3,25 +3,29 @@ from typing import List, Tuple, Dict, Callable
 import sys
 
 import pygame
-from logger import log_write, DEBUG_LEVEL
+from logger import Logger
 
-class PyStorage:
+class PyGStorage:
 
     @dispatch(str)
     def __init__(self, name: str):
+        self.logger = Logger(Logger.DEBUG_LEVEL.INFO)
         self.size = (640, 480)
         self.binds: List[Tuple[int, Callable]] = []
         self.objects: Dict = {}
-        self.screen, self.clock = pyInit(self.size, name)
         self.updateList: list[Callable] = []
+        self.screen, self.clock = pyInit(self.logger, self.size, name)
+        Logger.log_write("PyGStorage Intilizated", Logger.DEBUG_LEVEL.DEBUG)
 
     @dispatch(list, str)
     def __init__(self, size: Tuple, *, name: str):
+        self.logger = Logger(Logger.DEBUG_LEVEL.INFO)
         self.size = size
         self.binds: List[Tuple[int, Callable]] = []
         self.objects: Dict = {}
-        self.screen, self.clock = pyInit(self.size, name)
         self.updateList: list[Callable] = []
+        self.screen, self.clock = pyInit(self.logger, self.size, name)
+        Logger.log_write("PyGStorage Intilizated", Logger.DEBUG_LEVEL.DEBUG)
     
     def AddUpdate(self, func: Callable) -> None:
         self.updateList.append(func)
@@ -58,8 +62,10 @@ class PyStorage:
         pygame.display.update()
         self.clock.tick(60)
     
-    def screenMiddle(self) -> None:
+    def screenMiddle(self) -> Tuple[int, int]:
         return (self.size[0]/2, self.size[1]/2)
+    def screenMiddleFloat(self) -> Tuple[float, float]:
+        return (float(self.size[0]/2), float(self.size[1]/2))
 
 def giveEvents() -> list:
     return pygame.event.get()
@@ -70,15 +76,15 @@ def Quit() -> None:
 
 
 
-def pyInit(Size, Caption = "Pygame game") -> Tuple[pygame.surface.Surface, pygame.time.Clock]:
+def pyInit(logger: Logger, Size, Caption = "Pygame game") -> Tuple[pygame.surface.Surface, pygame.time.Clock]:
     pygame.init()
-    log_write("Pygame Initiated", DEBUG_LEVEL.INFO)
+    logger.log_write("Pygame Initiated", Logger.DEBUG_LEVEL.INFO)
 
     pygame.display.set_caption(Caption)
     Screen = pygame.display.set_mode(Size)
-    log_write("Window Initiated", DEBUG_LEVEL.DEBUG)
+    logger.log_write("Window Initiated", Logger.DEBUG_LEVEL.DEBUG)
 
     Clock = pygame.time.Clock()
-    log_write("Clock Initiated", DEBUG_LEVEL.DEBUG)
+    logger.log_write("Clock Initiated", Logger.DEBUG_LEVEL.DEBUG)
 
     return Screen, Clock
