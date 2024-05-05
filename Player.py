@@ -1,23 +1,22 @@
 from typing import Tuple
 
-class Player:
-    X: int
-    Y: int
-    ANGLE: float
-    SPEED: int
-    VELOCITY = [0, 0]
+from BaseEntity import BaseEntity
+from pygame import color as col
+from pygame import surface, draw, rect
+class Player(BaseEntity):
 
-    def __init__(self, POS: Tuple[int, int], ANGLE: float, SPEED):
-        self.X = POS[0]
-        self.Y = POS[1]
-        self.ANGLE = ANGLE
-        self.SPEED = SPEED
+    def __init__(self, pos: Tuple[int], angle: float, speed: int, color: col.Color, screen: surface.Surface):
+        super().__init__(pos, angle, speed, 30, color)
+        self.screen = screen
+
+    def goLeft(self) -> None:
+        self.velocity[0] -= self.speed
+    def goRight(self) -> None:
+        self.velocity[0] += self.speed
+    def goDown(self) -> None:
+        self.velocity += self.speed
+    def goUp(self) -> None:
+        self.velocity -= self.speed
     
-    def goLeft(self):
-        self.VELOCITY[0] -= self.SPEED
-    def goRight(self):
-        self.VELOCITY[0] += self.SPEED
-    def goDown(self):
-        self.VELOCITY += self.SPEED
-    def goUp(self):
-        self.VELOCITY -= self.SPEED
+    def Update(self) -> None:
+        draw.rect(self.screen, self.color, rect.Rect(self.x, self.y, self.size, self.size))
