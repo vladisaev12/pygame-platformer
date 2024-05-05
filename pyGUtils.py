@@ -46,14 +46,17 @@ class PyStorage:
     
 
     def runUpdates(self) -> None:
-        print(self.updateList)
         if self.updateList:
             for func in self.updateList:
                 func()
 
     def Update(self) -> None:
+        self.screen.fill((0, 0, 0))
         self.quitCheck()
+        self.runKeyBinds()
         self.runUpdates()
+        pygame.display.update()
+        self.clock.tick(60)
     
     def screenMiddle(self) -> None:
         return (self.size[0]/2, self.size[1]/2)

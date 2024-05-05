@@ -14,9 +14,11 @@ class Player(BaseEntity):
     def goRight(self) -> None:
         self.velocity[0] += self.speed
     def goDown(self) -> None:
-        self.velocity += self.speed
+        self.velocity[1] += self.speed
     def goUp(self) -> None:
-        self.velocity -= self.speed
+        self.velocity[1] -= self.speed
     
     def Update(self) -> None:
+        self.x += self.velocity[0]
+        self.y += self.velocity[1]
         draw.rect(self.screen, self.color, rect.Rect(self.x, self.y, self.size, self.size))
