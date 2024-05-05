@@ -33,7 +33,7 @@ class Logger:
             self.log_file = open("latest.log", "w")
             self.log_write("Logger Initilizated", self.DEBUG_LEVEL.INFO)
 
-    def log_write(self ,msg: str, debug_level):
+    def log_write(self, msg: str, debug_level):
         if self.DEBUG_LEVEL[debug_level.name] == self.DEBUG_LEVEL[self._debug_level.name]:
             self.log_file.write("\n")
             self.log_file.write(f"[{running_time()}] {debug_level} {msg}")

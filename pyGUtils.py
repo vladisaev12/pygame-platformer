@@ -15,7 +15,7 @@ class PyGStorage:
         self.objects: Dict = {}
         self.updateList: list[Callable] = []
         self.screen, self.clock = pyInit(self.logger, self.size, name)
-        Logger.log_write("PyGStorage Intilizated", Logger.DEBUG_LEVEL.DEBUG)
+        self.Logger.log_write("PyGStorage Intilizated", Logger.DEBUG_LEVEL.DEBUG)
 
     @dispatch(list, str)
     def __init__(self, size: Tuple, *, name: str):
