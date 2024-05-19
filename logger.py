@@ -24,20 +24,20 @@ class Logger:
 
     def __init__(self, debug_level: DEBUG_LEVEL) -> None:
         self._debug_level = debug_level
-        self.log_file = open("latest.log", "w")
-        print(getcwd())
         if not isfile(getcwd() + "/latest.log"):
             self.log_file = open("latest.log", "x")
             self.log_write("Logger Initilizated", self.DEBUG_LEVEL.INFO)
-        elif isfile(getcwd() + "latest.log"):
+        elif isfile(getcwd() + "/latest.log"):
             self.log_file = open("latest.log", "w")
             self.log_write("Logger Initilizated", self.DEBUG_LEVEL.INFO)
 
-    def log_write(self, msg: str, debug_level):
+    def log_write(self, msg: str, debug_level: DEBUG_LEVEL):
         if self.DEBUG_LEVEL[debug_level.name] == self.DEBUG_LEVEL[self._debug_level.name]:
-            self.log_file.write("\n")
-            self.log_file.write(f"[{running_time()}] {debug_level} {msg}")
-            print("\n")
             print(f"[{running_time()}] {debug_level} {msg}")
+            self.log_file.write("\n")
+    
+    def removeLogger(self):
+        self.log_write("Logger is Closed")
+        self.log_file.close()
 
 

@@ -11,7 +11,7 @@ GameStorage: pyGUtils.PyGStorage = pyGUtils.PyGStorage("test game")
 GameStorage.AddKeyBind(pygame.QUIT, pyGUtils.Quit)
 
 #add the player to the GameStorage Object
-GameStorage.AddObject("Player",Player(GameStorage.screenMiddleFloat(), 0, 1, pygame.Color(0, 255, 255), GameStorage.screen, 2.0, 5.0, GameStorage.screenMiddle()))
+GameStorage.AddObject("Player",Player(GameStorage.screenMiddleFloat(), 0, 0.15, pygame.Color(0, 255, 255), GameStorage.screen, GameStorage.screenMiddle()))
 
 #player movement
 GameStorage.AddKeyBind(pygame.K_a, GameStorage.objects["Player"].goLeft)
@@ -23,4 +23,5 @@ GameStorage.AddUpdate(GameStorage.objects["Player"].Update)
 
 GameStorage.logger.log_write("Loop Starting", Logger.DEBUG_LEVEL.DEBUG)
 while True:
+    # print("FPS:" + str(int(GameStorage.clock.get_fps())))
     GameStorage.Update()
