@@ -1,15 +1,27 @@
-import pyUtils
-from pyUtils import pygame
-from logger import log_write, DEBUG_LEVEL
+import pyGUtils
+from pyGUtils import pygame
+from logger import Logger
 
-Running = True
-GameStorage: pyUtils.PyStorage = pyUtils.PyStorage("test game")
+from Player import Player
 
-GameStorage.AddEventBind(pygame.QUIT, pyUtils.Quit)
+#create the Storage
+GameStorage: pyGUtils.PyGStorage = pyGUtils.PyGStorage("test game")
 
-log_write("Loop Starting", DEBUG_LEVEL.INFO)
-while Running:
-    GameStorage.runEventBinds()
+#add exit keybind
+GameStorage.AddKeyBind(pygame.QUIT, pyGUtils.Quit)
 
-    pygame.display.update()
-    GameStorage.CLOCK.tick(60)
+#add the player to the GameStorage Object
+GameStorage.AddObject("Player",Player(GameStorage.screenMiddleFloat(), 0, 0.15, pygame.Color(0, 255, 255), GameStorage.screen, GameStorage.screenMiddle()))
+
+#player movement
+GameStorage.AddKeyBind(pygame.K_a, GameStorage.objects["Player"].goLeft)
+GameStorage.AddKeyBind(pygame.K_d, GameStorage.objects["Player"].goRight)
+GameStorage.AddKeyBind(pygame.K_s, GameStorage.objects["Player"].goDown)
+GameStorage.AddKeyBind(pygame.K_w, GameStorage.objects["Player"].goUp)
+
+GameStorage.AddUpdate(GameStorage.objects["Player"].Update)
+
+GameStorage.logger.log_write("Loop Starting", Logger.DEBUG_LEVEL.DEBUG)
+while True:
+    # print("FPS:" + str(int(GameStorage.clock.get_fps())))
+    GameStorage.Update()
