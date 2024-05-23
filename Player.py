@@ -3,19 +3,19 @@ from os import getcwd
 
 from BaseEntity import BaseEntity
 from pygame import color as col
-from pygame import surface, draw, rect, image
+from pygame import surface, draw, rect, image, transform
 class Player(BaseEntity):
 
     def __init__(self, pos: Tuple[float, float], angle: float, speed: float, color: col.Color, screen: surface.Surface, scr_size: Tuple[int, int]):
-        super().__init__(pos, angle, speed, 32, color)
+        super().__init__(pos, angle, speed, color)
+        self.size = 128
         self.screen = screen
         self.scr_size = scr_size
         self.minspd = self.speed * 0.15 # 15% of speed is minimal
         self.aPK = {} # (A)lready (P)ressed (K)eys
-        self.idle_anim = []
-        for i in range(1, 13):
-            self.idle_anim.append(image.load(getcwd() + f"/animations/player/idle{i}.png"))
-        self.cur_anim = "idle"
+        self.idle_anim_ranged = [transform.rotozoom(image.load(getcwd() + f"/animations/player_ranged/idle/{i:02}.png"), 0, 2) for i in range(2,13)]
+        self.idle_anim_melee = [transform.rotozoom(image.load(getcwd() + f"/animations/player_melee/idle/{i:02}.png"), 0, 2) for i in range(2,9)]
+        self.cur_anim = "idle_ranged"
         self.cur_frame = 0
     #y is inversed since pygame positioning is top-left to bottom-right
 
@@ -31,7 +31,7 @@ class Player(BaseEntity):
     def goUp(self) -> None:
         self.velocity[1] -= self.speed
         self.aPK["up"] = True
-    
+
     def MovementUpdate(self) -> None: # probably the junkiest shit that you'll ever see
         friction = 0.05 # TODO: FIX: a small patch, will get changed when new surfaces will be added
         # X axis friction
@@ -66,9 +66,15 @@ class Player(BaseEntity):
         for key in self.aPK.keys():
             self.aPK[key] = False
         # draw.rect(self.screen, self.color, rect.Rect(self.x, self.y, self.size, self.size))
-        if self.cur_anim == "idle":
-            if self.cur_frame < 11:
+        if self.cur_anim == "idle_melee":
+            if self.cur_frame < 7:
                 self.cur_frame += 1
             else:
                 self.cur_frame = 0
-            self.screen.blit(self.idle_anim[self.cur_frame], rect.Rect(self.x, self.y, self.size * 2, self.size * 2))
+            self.screen.blit(self.idle_anim_melee[self.cur_frame], rect.Rect(self.x, self.y, self.size, self.size))
+        if self.cur_anim == "idle_ranged":
+            if self.cur_frame < 10:
+                self.cur_frame += 1
+            else:
+                self.cur_frame = 0
+            self.screen.blit(self.idle_anim_ranged[self.cur_frame], rect.Rect(self.x, self.y, self.size, self.size))
